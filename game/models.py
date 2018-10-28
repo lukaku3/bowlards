@@ -2,7 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 
 # Create your models here.
-class Games(models.Model):
+class Game(models.Model):
 #    user_id = models.ForeignKey( User, on_delete=models.CASCADE)
     user_id = models.IntegerField(default=0)
     f1_0 = models.SmallIntegerField(default=0)
@@ -30,4 +30,4 @@ class Games(models.Model):
 #    modified = models.DecimalField(null=True)
 #    delted = models.DecimalField(null=True)
     class  Meta:
-        db_table = 'games'
+        db_table = 'game'
