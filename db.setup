@@ -1,0 +1,4 @@
+create database bowlards default charset=utf8;
+grant all privileges on *.* to bowlards@'localhost' identified by 'bowlards' with grant option;
+flush privileges;
+
