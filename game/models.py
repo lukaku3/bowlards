@@ -4,7 +4,6 @@ from django.contrib.auth.models import User
 # Create your models here.
 class Game(models.Model):	
     user_id = models.ForeignKey( User, on_delete=models.CASCADE)	
-#    user_id = models.IntegerField(default=0)	
     f1_0 = models.SmallIntegerField(default=0)	
     f1_1 = models.SmallIntegerField(default=0)	
     f2_0 = models.SmallIntegerField(default=0)	
