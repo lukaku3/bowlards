@@ -11,6 +11,15 @@ class IndexView(View):
 
 index = IndexView.as_view()
 
+class AddView(View):
+    def get(self, request, *args, **kwargs):
+        context = {
+            'msg': 'game/index'
+        }
+        return render(request, 'game/add.html', context)
+
+add = AddView.as_view()
+
 class changeView(View):
     def get(self, request, *args, **kwargs):
         context = {

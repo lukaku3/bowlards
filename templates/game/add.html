@@ -1,0 +1,24 @@
+{% extends "layout.html" %}
+{% block content %}
+{% include "game/nav.html" %}
+<style>
+div.container{
+  //border: 1px solid;
+}
+div.row > div{
+  border: 1px solid;
+}
+input.score{
+  width: 16px;
+  margin: 0px;
+}
+</style>
+<div class="container">
+  <div class="row">
+    <div class="col-sm">
+        <input type="text" class="score" name="f1_0">
+        <input type="text" class="score" name="f1_1">
+    </div>
+  </div>
+</div>
+{% endblock %}
