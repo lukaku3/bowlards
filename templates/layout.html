@@ -11,7 +11,7 @@
     <title>Hello, world!</title>
   </head>
   <body>
-<nav class="navbar navbar-light bg-light">
+<nav class="navbar navbar-dark bg-dark">
   <a class="navbar-brand">Bowlards</a>
   <!--form class="form-inline">
     <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
@@ -23,6 +23,7 @@
       </li>
     </ul>
 </nav>
+    {% block nav_action %}{% endblock %}
     {% include '_message.html' %}
     {% block content %}{% endblock %}
     <!-- Optional JavaScript -->
