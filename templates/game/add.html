@@ -7,18 +7,80 @@ div.container{
 }
 div.row > div{
   border: 1px solid;
+  position：relative;
+  overflow-x：scroll;
+}
+div.col-sm{
+  padding-left: 0px;
+  padding-right: 0px;
+  height: 40px;
+  display:inline !important;
 }
 input.score{
-  width: 16px;
+  width: 18px;
   margin: 0px;
+  display:inline !important;
 }
+div.col-sm.f1{}
 </style>
 <div class="container">
-  <div class="row">
-    <div class="col-sm">
-        <input type="text" class="score" name="f1_0">
-        <input type="text" class="score" name="f1_1">
+    <div class="row">
+        <div class="game">
+            <div class="col-sm inline-form f1">
+                <input type="text" class="score d-inline form-control" name="f1_0">
+                <input type="text" class="score d-inline form-control" name="f1_1">
+            </div>
+            <div class="col-sm f2">
+                <input type="text" class="score d-inline form-control" name="f2_0">
+                <input type="text" class="score d-inline form-control" name="f2_1">
+            </div>
+            <div class="col-sm f3">
+                <input type="text" class="score d-inline form-control" name="f3_0">
+                <input type="text" class="score d-inline form-control" name="f3_1">
+            </div>
+            <div class="col-sm f4">
+                <input type="text" class="score d-inline form-control" name="f4_0">
+                <input type="text" class="score d-inline form-control" name="f4_1">
+            </div>
+            <div class="col-sm f5">
+                <input type="text" class="score d-inline form-control" name="f5_0">
+                <input type="text" class="score d-inline form-control" name="f5_1">
+            </div>
+            <div class="col-sm f6">
+                <input type="text" class="score d-inline form-control" name="f6_0">
+                <input type="text" class="score d-inline form-control" name="f6_1">
+            </div>
+            <div class="col-sm f7">
+                <input type="text" class="score d-inline form-control" name="f7_0">
+                <input type="text" class="score d-inline form-control" name="f7_1">
+            </div>
+            <div class="col-sm f8">
+                <input type="text" class="score d-inline form-control" name="f8_0">
+                <input type="text" class="score d-inline form-control" name="f8_1">
+            </div>
+            <div class="col-sm f9">
+                <input type="text" class="score d-inline form-control" name="f9_0">
+                <input type="text" class="score d-inline form-control" name="f9_1">
+            </div>
+            <div class="col-sm f10 ">
+                <input type="text" class="score d-inline form-control" name="f10_0">
+                <input type="text" class="score d-inline form-control" name="f10_1">
+                <input type="text" class="score d-inline form-control" name="f10_2">
+            </div>
+        </div>
     </div>
+    <div class="col-sm">
+        <button type="button" class="btn btn-info">NextLane</button>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="row">
+    <table class="table table-responsive ">
+         <tr>
+         </tr>
+    </table>
   </div>
 </div>
 {% endblock %}
