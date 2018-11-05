@@ -1,6 +1,5 @@
 {% extends "layout.html" %}
-{% block content %}
-{% include "game/nav.html" %}
+{% block extra_css %}
 <style>
 div.container{
   //border: 1px solid;
@@ -10,77 +9,90 @@ div.row > div{
   position：relative;
   overflow-x：scroll;
 }
-div.col-sm{
-  padding-left: 0px;
-  padding-right: 0px;
+table > thead > tr > th{
+  text-align: center;
+  padding: 2px !important;
+}
+table > tbody > tr{
   height: 40px;
-  display:inline !important;
+}
+.table td{
+  text-align: center;
+  vertical-align: bottom;
+  vertical-align: bottom;
+  padding: 2px !important;
 }
 input.score{
   width: 18px;
   margin: 0px;
   display:inline !important;
 }
-div.col-sm.f1{}
 </style>
+{% endblock %}
+{% block content %}
+{% include "game/nav.html" %}
 <div class="container">
     <div class="row">
-        <div class="game">
-            <div class="col-sm inline-form f1">
-                <input type="text" class="score d-inline form-control" name="f1_0">
-                <input type="text" class="score d-inline form-control" name="f1_1">
-            </div>
-            <div class="col-sm f2">
-                <input type="text" class="score d-inline form-control" name="f2_0">
-                <input type="text" class="score d-inline form-control" name="f2_1">
-            </div>
-            <div class="col-sm f3">
-                <input type="text" class="score d-inline form-control" name="f3_0">
-                <input type="text" class="score d-inline form-control" name="f3_1">
-            </div>
-            <div class="col-sm f4">
-                <input type="text" class="score d-inline form-control" name="f4_0">
-                <input type="text" class="score d-inline form-control" name="f4_1">
-            </div>
-            <div class="col-sm f5">
-                <input type="text" class="score d-inline form-control" name="f5_0">
-                <input type="text" class="score d-inline form-control" name="f5_1">
-            </div>
-            <div class="col-sm f6">
-                <input type="text" class="score d-inline form-control" name="f6_0">
-                <input type="text" class="score d-inline form-control" name="f6_1">
-            </div>
-            <div class="col-sm f7">
-                <input type="text" class="score d-inline form-control" name="f7_0">
-                <input type="text" class="score d-inline form-control" name="f7_1">
-            </div>
-            <div class="col-sm f8">
-                <input type="text" class="score d-inline form-control" name="f8_0">
-                <input type="text" class="score d-inline form-control" name="f8_1">
-            </div>
-            <div class="col-sm f9">
-                <input type="text" class="score d-inline form-control" name="f9_0">
-                <input type="text" class="score d-inline form-control" name="f9_1">
-            </div>
-            <div class="col-sm f10 ">
-                <input type="text" class="score d-inline form-control" name="f10_0">
-                <input type="text" class="score d-inline form-control" name="f10_1">
-                <input type="text" class="score d-inline form-control" name="f10_2">
-            </div>
-        </div>
+        <form>
+        <table class="table table-bordered" id="game">
+            <thead>
+                <tr>
+                    <th scope="col-sm">1</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="score">
+                    <td scope="col" class="f1">
+                        <div class="col-sm f1">
+                            <input type="text" class="score d-inline form-control" name="f1_0" aria-describedby="inputGroup-sizing-sm">
+                            <input type="text" class="score d-inline form-control" name="f1_1" aria-describedby="inputGroup-sizing-sm">
+                        </div>
+                    </td>
+                </tr>
+                <tr class="summary">
+                    <td class="f1">0</td>
+                </tr>
+            </tbody>
+        </table>
+        </form>
     </div>
     <div class="col-sm">
         <button type="button" class="btn btn-info">NextLane</button>
     </div>
   </div>
 </div>
+{% endblock %}
+{% block extra_js %}
+<script>
+$(function(){
+    $("button.btn.btn-info").on("click", function(){
+        var cnt = fnCountLane();
+console.log(cnt);
+        if ( cnt < 10 ) {
+            fnAddLane(cnt);
+        }
+    });
 
-<div class="container">
-  <div class="row">
-    <table class="table table-responsive ">
-         <tr>
-         </tr>
-    </table>
-  </div>
-</div>
+    function fnAddLane(cnt){
+        fnAddHead(cnt);
+        fnAddTd(cnt);
+        fnAddScore(cnt);
+    };
+    function fnAddHead(cnt){
+        $(".table thead > tr").append('<th scope="col-sm">'+(cnt+1)+"</th>");
+    }
+    function fnAddTd(cnt){
+        $(".table tbody > tr").append('<td scope="col" class="f'+(cnt+1)+'"></td>');
+    }
+    function fnAddScore(cnt){
+        $(".score > td.f"+(cnt+1)).append('<div class="col-sm f'+(cnt+1)+'">');
+        $(".score > td.f"+(cnt+1)+' > div').append('<input type="text" class="score d-inline form-control" name="f'+(cnt+1)+'_0" aria-describedby="inputGroup-sizing-sm">');
+        $(".score > td.f"+(cnt+1)+' > div').append('<input type="text" class="score d-inline form-control" name="f'+(cnt+1)+'_1" aria-describedby="inputGroup-sizing-sm">');
+    }
+    function fnCountLane(){
+        return $("table#game > thead > tr > th").length;
+    }
+
+});
+</script>
 {% endblock %}
