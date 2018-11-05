@@ -43,9 +43,23 @@ input.score{
             <tbody>
                 <tr class="score">
                     <td scope="col" class="f1">
-                        <div class="col-sm f1">
-                            <input type="text" class="score d-inline form-control" name="f1_0" aria-describedby="inputGroup-sizing-sm">
-                            <input type="text" class="score d-inline form-control" name="f1_1" aria-describedby="inputGroup-sizing-sm">
+                        <div class="col-sm f1 input-group m-1">
+  <select class="custom-select" id="inputGroupSelect01" name="f1_0">
+    <option selected></option>
+    <option value="0">G</option>
+    <option value="1">1</option>
+    <option value="2">2</option>
+    <option value="3">3</option>
+  </select>
+  <select class="custom-select" id="inputGroupSelect01" name="f1_1">
+    <option selected></option>
+    <option value="0">G</option>
+    <option value="1">1</option>
+    <option value="2">2</option>
+    <option value="3">3</option>
+  </select>
+                            <input type="hidden" name="f1_0">
+                            <input type="hidden" name="f1_1">
                         </div>
                     </td>
                 </tr>
@@ -85,9 +99,16 @@ console.log(cnt);
         $(".table tbody > tr").append('<td scope="col" class="f'+(cnt+1)+'"></td>');
     }
     function fnAddScore(cnt){
-        $(".score > td.f"+(cnt+1)).append('<div class="col-sm f'+(cnt+1)+'">');
-        $(".score > td.f"+(cnt+1)+' > div').append('<input type="text" class="score d-inline form-control" name="f'+(cnt+1)+'_0" aria-describedby="inputGroup-sizing-sm">');
-        $(".score > td.f"+(cnt+1)+' > div').append('<input type="text" class="score d-inline form-control" name="f'+(cnt+1)+'_1" aria-describedby="inputGroup-sizing-sm">');
+        $(".score > td.f"+(cnt+1)).append('<div class="col-sm input-group m-1 f'+(cnt+1)+'">');
+        fnAddSelect(cnt);
+    }
+    function fnAddSelect(cnt){
+        $('.score > td.f'+(cnt+1)+' > div').append('<select class="custom-select" id="inputGroupSelect'+(cnt+1)+'" name="f'+(cnt+1)+'_0">');
+        var select_cnt = $('.score > td.f'+(cnt+1)+' > div').length;
+        console.log("select:"+select_cnt);
+        var list0 = {"0": "G", "1":"1", "2":"2", "3":"3", "4":"4", "5":"5", "6":"6", "7":"7", "8":"8","9":"9","X":"X"}
+        var list1 = {"0": "-", "1":"1", "2":"2", "3":"3", "4":"4", "5":"5", "6":"6", "7":"7", "8":"8","9":"9","/":"/"}
+        console.log('.score > td.f'+(cnt+1)+' > div');
     }
     function fnCountLane(){
         return $("table#game > thead > tr > th").length;
