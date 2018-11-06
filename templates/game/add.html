@@ -70,11 +70,13 @@ input.score{
 $(function(){
     fnAddLane(0);
 
-    $('select').on('change', function(){
+    $(document).on('change', 'select', function(){
+        var dt = moment().format('YYYY-mm-DD hh:mm:ss');
         $('input[name="'+this.name+'"]').val(this.value);
+        $('input[name="'+this.name+'_dt"]').val(dt);
         var lane_no = this.name.match(/f([0-9]+)/);
         var select_cnt = fnCountSelect(lane_no[1]);
-        fnAddSelect(lane_no[1]-1);
+        if(select_cnt < 2)fnAddSelect(lane_no[1]-1);
     });
 
     $("button.btn.btn-info").on("click", function(){
@@ -97,7 +99,9 @@ $(function(){
     function fnAddTd(cnt){
         $(".table tbody > tr").append('<td scope="col" class="f'+(cnt+1)+'"></td>');
         $(".table tbody > tr.summary > td.f"+(cnt+1)).append('<input type="hidden" name="f'+(cnt+1)+'_0">');
+        $(".table tbody > tr.summary > td.f"+(cnt+1)).append('<input type="hidden" name="f'+(cnt+1)+'_0_dt">');
         $(".table tbody > tr.summary > td.f"+(cnt+1)).append('<input type="hidden" name="f'+(cnt+1)+'_1">');
+        $(".table tbody > tr.summary > td.f"+(cnt+1)).append('<input type="hidden" name="f'+(cnt+1)+'_1_dt">');
     }
 
     function fnAddScore(cnt){
@@ -106,8 +110,6 @@ $(function(){
     }
 
     function fnAddSelect(cnt){
-console.log("nct:"+cnt);
-        //var select_cnt = $('.score > td.f'+(cnt+1)+' > div').length;
         var select_cnt = fnCountSelect(cnt);
         if ( select_cnt > 2 ) return false;
         var list = {};
@@ -116,11 +118,10 @@ console.log("nct:"+cnt);
         }else{
             list = {"0": "G", "1":"1", "2":"2", "3":"3", "4":"4", "5":"5", "6":"6", "7":"7", "8":"8","9":"9","10":"X"};
         }
-        console.log('.score > td.f'+(cnt+1)+' > div > select[name="f'+cnt+'_'+select_cnt+'"]');
         $('.score > td.f'+(cnt+1)+' > div').append('<select class="custom-select" name="f'+(cnt+1)+'_'+(select_cnt)+'">');
-        $('.score > td.f'+(cnt+1)+' > div > select[name="f'+cnt+'_'+select_cnt+'"]').append('<option>');
+        $('.score > td.f'+(cnt+1)+' > div > select[name="f'+(cnt+1)+'_'+select_cnt+'"]').append('<option>');
         $.each(list, function(key,val){
-            $('.score > td.f'+(cnt+1)+' > div > select').append('<option value="'+key+'">'+val);
+            $('.score > td.f'+(cnt+1)+' > div > select[name="f'+(cnt+1)+'_'+select_cnt+'"]').append('<option value="'+key+'">'+val);
         });
     }
 
