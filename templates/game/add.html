@@ -27,6 +27,14 @@ input.score{
   margin: 0px;
   display:inline !important;
 }
+.score select{
+  width: 40px !important;
+  padding: 1px !important;
+}
+.score option{
+//  width: 40px !important;
+//  padding: 1px !important;
+}
 </style>
 {% endblock %}
 {% block content %}
@@ -37,34 +45,20 @@ input.score{
         <table class="table table-bordered" id="game">
             <thead>
                 <tr>
-                    <th scope="col-sm">1</th>
+                    <!--th scope="col-sm">1</th-->
                 </tr>
             </thead>
             <tbody>
                 <tr class="score">
-                    <td scope="col" class="f1">
+                    <!--td scope="col" class="f1">
                         <div class="col-sm f1 input-group m-1">
-  <select class="custom-select" id="inputGroupSelect01" name="f1_0">
-    <option selected></option>
-    <option value="0">G</option>
-    <option value="1">1</option>
-    <option value="2">2</option>
-    <option value="3">3</option>
-  </select>
-  <select class="custom-select" id="inputGroupSelect01" name="f1_1">
-    <option selected></option>
-    <option value="0">G</option>
-    <option value="1">1</option>
-    <option value="2">2</option>
-    <option value="3">3</option>
-  </select>
                             <input type="hidden" name="f1_0">
                             <input type="hidden" name="f1_1">
                         </div>
-                    </td>
+                    </td-->
                 </tr>
                 <tr class="summary">
-                    <td class="f1">0</td>
+                    <!--td class="f1">0</td-->
                 </tr>
             </tbody>
         </table>
@@ -75,13 +69,25 @@ input.score{
     </div>
   </div>
 </div>
+{{ form }}
+{{ form.select.label　}}
+{% for radio in form.select %}
+    {{ radio.tag }}
+    <label>{{ radio.choice_label }}</label>
+{% endfor %}
 {% endblock %}
 {% block extra_js %}
 <script>
 $(function(){
+    fnAddLane(0);
+
+    $('select').on('change', function(){
+        console.log(this.name);
+        console.log(this.value);
+    });
+
     $("button.btn.btn-info").on("click", function(){
         var cnt = fnCountLane();
-console.log(cnt);
         if ( cnt < 10 ) {
             fnAddLane(cnt);
         }
@@ -92,24 +98,41 @@ console.log(cnt);
         fnAddTd(cnt);
         fnAddScore(cnt);
     };
+
     function fnAddHead(cnt){
         $(".table thead > tr").append('<th scope="col-sm">'+(cnt+1)+"</th>");
     }
+
     function fnAddTd(cnt){
         $(".table tbody > tr").append('<td scope="col" class="f'+(cnt+1)+'"></td>');
+        $(".table tbody > tr.summary > td.f"+(cnt+1)).append('<input type="hidden" name="f'+(cnt+1)+'_0">');
+        $(".table tbody > tr.summary > td.f"+(cnt+1)).append('<input type="hidden" name="f'+(cnt+1)+'_1">');
     }
+
     function fnAddScore(cnt){
         $(".score > td.f"+(cnt+1)).append('<div class="col-sm input-group m-1 f'+(cnt+1)+'">');
         fnAddSelect(cnt);
     }
+
     function fnAddSelect(cnt){
-        $('.score > td.f'+(cnt+1)+' > div').append('<select class="custom-select" id="inputGroupSelect'+(cnt+1)+'" name="f'+(cnt+1)+'_0">');
         var select_cnt = $('.score > td.f'+(cnt+1)+' > div').length;
-        console.log("select:"+select_cnt);
-        var list0 = {"0": "G", "1":"1", "2":"2", "3":"3", "4":"4", "5":"5", "6":"6", "7":"7", "8":"8","9":"9","X":"X"}
-        var list1 = {"0": "-", "1":"1", "2":"2", "3":"3", "4":"4", "5":"5", "6":"6", "7":"7", "8":"8","9":"9","/":"/"}
-        console.log('.score > td.f'+(cnt+1)+' > div');
+        if ( select_cnt > 2 ) return false;
+        var $select = undefined;
+        var list = {};
+        if ( select_cnt == 1 ){
+            list = {"0": "G", "1":"1", "2":"2", "3":"3", "4":"4", "5":"5", "6":"6", "7":"7", "8":"8","9":"9","10":"X"},
+            $select = $('select[name=f'+(cnt+1)+'_0]');
+        }else{
+            list = {"0": "-", "1":"1", "2":"2", "3":"3", "4":"4", "5":"5", "6":"6", "7":"7", "8":"8","9":"9","10":"/"},
+            $select = $('select[name=f'+(cnt+1)+'_1]');
+        }
+        $('.score > td.f'+(cnt+1)+' > div').append('<select class="custom-select" name="f'+(cnt+1)+'_'+(select_cnt-1)+'">');
+        $('.score > td.f'+(cnt+1)+' > div > select').append('<option >');
+        $.each(list, function(key,val){
+            $('.score > td.f'+(cnt+1)+' > div > select').append('<option value="'+key+'">'+val);
+        });
     }
+
     function fnCountLane(){
         return $("table#game > thead > tr > th").length;
     }
