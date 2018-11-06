@@ -31,10 +31,6 @@ input.score{
   width: 40px !important;
   padding: 1px !important;
 }
-.score option{
-//  width: 40px !important;
-//  padding: 1px !important;
-}
 </style>
 {% endblock %}
 {% block content %}
@@ -42,30 +38,23 @@ input.score{
 <div class="container">
     <div class="row">
         <form>
-        <table class="table table-bordered" id="game">
-            <thead>
-                <tr>
-                    <!--th scope="col-sm">1</th-->
-                </tr>
-            </thead>
-            <tbody>
-                <tr class="score">
-                    <!--td scope="col" class="f1">
-                        <div class="col-sm f1 input-group m-1">
-                            <input type="hidden" name="f1_0">
-                            <input type="hidden" name="f1_1">
-                        </div>
-                    </td-->
-                </tr>
-                <tr class="summary">
-                    <!--td class="f1">0</td-->
-                </tr>
-            </tbody>
-        </table>
+            <div class="form-group form-inline">
+                <div>
+                    <table class="table table-bordered" id="game">
+                        <thead>
+                            <tr></tr>
+                        </thead>
+                        <tbody>
+                            <tr class="score"></tr>
+                            <tr class="summary"></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="col-sm">
+                    <button type="button" class="btn btn-info">NextLane</button>
+                </div>
+            </div>
         </form>
-    </div>
-    <div class="col-sm">
-        <button type="button" class="btn btn-info">NextLane</button>
     </div>
   </div>
 </div>
@@ -84,6 +73,7 @@ $(function(){
     $('select').on('change', function(){
         console.log(this.name);
         console.log(this.value);
+        $('input[name="'+this.name+'"]').val(this.value);
     });
 
     $("button.btn.btn-info").on("click", function(){
