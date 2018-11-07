@@ -76,9 +76,7 @@ $(function(){
 
 
     $(document).on('change', 'select', function(){
-//        var dt = moment().format('YYYY-mm-DD hh:mm:ss');
-//        $('input[name="'+this.name+'"]').val(this.value);
-//        $('input[name="'+this.name+'_dt"]').val(dt);
+        var data = [];
         var lane_no = this.name.match(/f([0-9]+)/);
         var select_cnt = fnCountSelect(lane_no[1]);
         var ex = fnCountSelect(lane_no[1]);
@@ -88,6 +86,8 @@ $(function(){
                 $('#addLane').prop('disabled', false);
             }
         }
+        score[this.name] = this.value;
+        score[this.name+"_dt"] = moment().format('YYYY-mm-DD hh:mm:ss');
     });
 
     $("button.btn.btn-info").on("click", function(){
