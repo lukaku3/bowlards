@@ -86,6 +86,20 @@ $(function(){
                 $('#addLane').prop('disabled', false);
             }
         }
+        if ( this.name.match(/f(\d)\_0/) != undefined){
+            //$('f'+cnt+'_1')
+            var diff = 10 - parseInt(this.value);
+            if ( diff == 0 ){
+                for(var i=1; i<11; i++){
+                    $('select[name="f'+lane_no[1]+'_1"]').children('option[value='+i+']').remove();
+                }
+                $('select[name="f'+lane_no[1]+'_1"]').val("0");
+            }else{
+                for(var i=0; i<10; i++){
+                    if ( diff <= i ) $('select[name="f'+lane_no[1]+'_1"]').children('option[value='+i+']').remove();
+                }
+            }
+        }
         score[this.name] = this.value;
         score[this.name+"_dt"] = moment().format('YYYY-mm-DD hh:mm:ss');
     });
