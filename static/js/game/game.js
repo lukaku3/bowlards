@@ -11,7 +11,7 @@ $(function(){
         var lane_no = this.name.match(/f([0-9]+)/);
         var select_cnt = fnCountSelect(lane_no[1]);
         var ex = fnCountSelect(lane_no[1]);
-        if( ex > 0 && ex % 2 == 1)fnAddSelect(lane_no[1]-1);
+        if( ex > 0 && ex % 2 == 1) fnAddSelect(lane_no[1]-1);
         if ( this.name.match(/f(\d)\_1/) != undefined){
             if ( ex > 0 && ex % 2 == 0 && this.name.match(/f(\d)\_1/)[1] == lane_no[1]){
                 $('#addLane').prop('disabled', false);
@@ -24,6 +24,7 @@ $(function(){
                 for(var i=1; i<11; i++){
                     $('select[name="f'+lane_no[1]+'_1"]').children('option[value='+i+']').remove();
                 }
+                
                 $('select[name="f'+lane_no[1]+'_1"]').val("0");
                 $('#addLane').prop('disabled', false);
             }else{
@@ -101,14 +102,27 @@ $(function(){
 
     function fnCalc(){
         console.log(score);
+        var strike = 0;
+        var spare = 0;
         for(var i=1; i<11; i++){
             if(score['f'+i+'_0'] == undefined) return false;
-            var val0 = parseInt(score['f'+i+'_0']), val1 = parseInt(score['f'+i+'_1']), sum = 0;
+            var val0 = parseInt(score['f'+i+'_0']);
+            var val1 = (parseInt(score['f'+i+'_1'])) ? parseInt(score['f'+i+'_1']) : 0 ;
+            var sum = 0;
+
             sum = (val0 + val1);
             console.log(val0);
             console.log(val1);
             console.log(sum);
-            if( (val0 + val1) < 10 ){
+            if (val0 == 10){
+                //
+                strike += 2;
+                console.log("strike:"+strike);
+            }else if( val1 == 10){
+                //
+                spare += 1;
+                console.log("spare");
+            }else if( (val0 + val1) < 10 ){
                 $('.summary td.f'+i+' > div').text( sum );
             }
         }
