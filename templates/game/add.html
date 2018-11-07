@@ -80,18 +80,11 @@ $(function(){
 //        $('input[name="'+this.name+'"]').val(this.value);
 //        $('input[name="'+this.name+'_dt"]').val(dt);
         var lane_no = this.name.match(/f([0-9]+)/);
-console.log(lane_no[1]);
         var select_cnt = fnCountSelect(lane_no[1]);
         var ex = fnCountSelect(lane_no[1]);
-//        if(select_cnt < 2)fnAddSelect(lane_no[1]-1);
-console.log("ex:"+ex);
         if( ex > 0 && ex % 2 == 1)fnAddSelect(lane_no[1]-1);
-console.log('select_cnt:'+select_cnt);
-//        var ex = fnCountSelect(lane_no[1]);
-console.log(this.name);
         if ( this.name.match(/f(\d)\_1/) != undefined){
-            if ( ex > 0 && ex % 2 == 0 && this.name.match(/f(\d)\_1/)[1] == 1){
-console.log("btn active.");
+            if ( ex > 0 && ex % 2 == 0 && this.name.match(/f(\d)\_1/)[1] == lane_no[1]){
                 $('#addLane').prop('disabled', false);
             }
         }
@@ -137,18 +130,13 @@ console.log("btn active.");
     }
 
     function fnAddSelect(cnt){
-//console.log('fnAddSelect:'+cnt);
         var select_cnt = fnCountSelect(cnt);
-//console.log("select_cnt:"+select_cnt);
-//        if ( select_cnt > 2 ) return false;
         var list = {};
         if ( select_cnt%2 == 1 ){
             list = {"0": "-", "1":"1", "2":"2", "3":"3", "4":"4", "5":"5", "6":"6", "7":"7", "8":"8","9":"9","10":"/"};
         }else{
             list = {"0": "G", "1":"1", "2":"2", "3":"3", "4":"4", "5":"5", "6":"6", "7":"7", "8":"8","9":"9","10":"X"};
         }
-//        $('.score > td.f'+(cnt+1)+' > div').append('<select class="custom-select" name="f'+(cnt+1)+'_'+(select_cnt)+'">');
-//        $('.score > td.f'+(cnt+1)+' > div > select[name="f'+(cnt+1)+'_'+select_cnt+'"]').append('<option>');
         $('.score > td.f'+(cnt+1)+' > div').append('<select class="custom-select" name="f'+(cnt+1)+'_'+(select_cnt%2)+'">');
         $('.score > td.f'+(cnt+1)+' > div > select[name="f'+(cnt+1)+'_'+(select_cnt%2)+'"]').append('<option>');
         $.each(list, function(key,val){
