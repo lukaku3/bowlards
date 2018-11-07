@@ -94,6 +94,7 @@ $(function(){
                     $('select[name="f'+lane_no[1]+'_1"]').children('option[value='+i+']').remove();
                 }
                 $('select[name="f'+lane_no[1]+'_1"]').val("0");
+                $('#addLane').prop('disabled', false);
             }else{
                 for(var i=0; i<10; i++){
                     if ( diff <= i ) $('select[name="f'+lane_no[1]+'_1"]').children('option[value='+i+']').remove();
