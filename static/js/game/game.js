@@ -49,6 +49,7 @@ $(function(){
         fnAddTd(cnt);
         fnAddScore(cnt);
         $('#addLane').prop('disabled', true);
+        fnCalc();
     };
 
     function fnDisableSelect(cnt){
@@ -99,4 +100,7 @@ $(function(){
         return $(".score select").length;
     }
 
+    function fnCalc(){
+        console.log(score);
+    }
 });
