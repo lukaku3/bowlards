@@ -67,8 +67,7 @@ $(function(){
 
     function fnAddTd(cnt){
         $(".table tbody > tr").append('<td scope="col" class="f'+(cnt+1)+'"></td>');
-        $(".table tbody > tr.summary > td.f"+(cnt+1)).append('<input type="hidden" name="f'+(cnt+1)+'_0">');
-        $(".table tbody > tr.summary > td.f"+(cnt+1)).append('<input type="hidden" name="f'+(cnt+1)+'_1">');
+        $(".table tbody > tr.summary > td.f"+(cnt+1)).append('<div>');
     }
 
     function fnAddScore(cnt){
@@ -102,5 +101,16 @@ $(function(){
 
     function fnCalc(){
         console.log(score);
+        for(var i=1; i<11; i++){
+            if(score['f'+i+'_0'] == undefined) return false;
+            var val0 = parseInt(score['f'+i+'_0']), val1 = parseInt(score['f'+i+'_1']), sum = 0;
+            sum = (val0 + val1);
+            console.log(val0);
+            console.log(val1);
+            console.log(sum);
+            if( (val0 + val1) < 10 ){
+                $('.summary td.f'+i+' > div').text( sum );
+            }
+        }
     }
 });
