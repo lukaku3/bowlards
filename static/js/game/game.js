@@ -51,6 +51,7 @@ $(function(){
         fnAddScore(cnt);
         $('#addLane').prop('disabled', true);
         fnCalc();
+        fnShowScore();
     };
 
     function fnDisableSelect(cnt){
@@ -101,31 +102,34 @@ $(function(){
     }
 
     function fnCalc(){
-        console.log(score);
         var strike = 0;
         var spare = 0;
         for(var i=1; i<11; i++){
             if(score['f'+i+'_0'] == undefined) return false;
             var val0 = parseInt(score['f'+i+'_0']);
             var val1 = (parseInt(score['f'+i+'_1'])) ? parseInt(score['f'+i+'_1']) : 0 ;
-            if (val0 == 10){
-                // strike;
+            if (val0 == 10){ // strike;
                 if (score['f'+(i+1)+'_0'] !== undefined && score['f'+(i+1)+'_1'] !== undefined){
                     if (score['f'+(i+1)+'_0'] >= 0 && score['f'+(i+1)+'_0'] < 10 
                         && score['f'+(i+1)+'_1'] >= 0 && score['f'+(i+1)+'_1'] < 10){
-console.log(i);
                         score['f'+i+'_score'] = (val0 + parseInt(score['f'+(i+1)+'_0']) + parseInt(score['f'+(i+1)+'_1']));
-                    }else if(score['f'+(i+1)+'_0'] == '10' && score['f'+(i+2)+'_0'] !== undefined){
-console.log(i);
-                        score['f'+i+'_score'] = (val0 + score['f'+(i+1)+'_0'] + score['f'+(i+2)+'_0']);
                     }
+                }else if(score['f'+(i+1)+'_0'] == 10 && (score['f'+(i+2)+'_0'] === "0" || score['f'+(i+2)+'_0'])>0 ){
+                    score['f'+i+'_score'] = (val0 + parseInt(score['f'+(i+1)+'_0']) + parseInt(score['f'+(i+2)+'_0']) );
+                }else if(score['f'+(i+1)+'_1'] == "10"){
+console.log("X + /");
+                    score['f'+i+'_score'] = 20;
                 }
-            }else if( val1 == 10){
-                // spare
+            }else if( val1 == 10){ // spare
                 if (score['f'+(i+1)+'_0'] !== undefined) score['f'+i+'_score'] = (val1 + parseInt(score['f'+(i+1)+'_0']));
             }else if( (val0 + val1) < 10 ){
                 score['f'+i+'_score'] = (val0 + val1);
             }
         }
+    }
+
+    function fnShowScore(){
+
+        console.log(score);
     }
 });
