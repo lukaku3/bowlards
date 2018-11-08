@@ -109,15 +109,14 @@ $(function(){
             var val0 = parseInt(score['f'+i+'_0']);
             var val1 = (parseInt(score['f'+i+'_1'])) ? parseInt(score['f'+i+'_1']) : 0 ;
             if (val0 == 10){ // strike;
-                if (score['f'+(i+1)+'_0'] !== undefined && score['f'+(i+1)+'_1'] !== undefined){
+                if (score['f'+(i+1)+'_0'] !== undefined && score['f'+(i+1)+'_1'] !== undefined && score['f'+(i+1)+'_1'] != 10){
                     if (score['f'+(i+1)+'_0'] >= 0 && score['f'+(i+1)+'_0'] < 10 
                         && score['f'+(i+1)+'_1'] >= 0 && score['f'+(i+1)+'_1'] < 10){
                         score['f'+i+'_score'] = (val0 + parseInt(score['f'+(i+1)+'_0']) + parseInt(score['f'+(i+1)+'_1']));
                     }
                 }else if(score['f'+(i+1)+'_0'] == 10 && (score['f'+(i+2)+'_0'] === "0" || score['f'+(i+2)+'_0'])>0 ){
                     score['f'+i+'_score'] = (val0 + parseInt(score['f'+(i+1)+'_0']) + parseInt(score['f'+(i+2)+'_0']) );
-                }else if(score['f'+(i+1)+'_1'] == "10"){
-console.log("X + /");
+                }else if( parseInt(score['f'+(i+1)+'_1']) == 10){
                     score['f'+i+'_score'] = 20;
                 }
             }else if( val1 == 10){ // spare
@@ -129,7 +128,12 @@ console.log("X + /");
     }
 
     function fnShowScore(){
-
-        console.log(score);
+        var sum = 0;
+        for(var i=0; i< 10; i++){
+            if( score['f'+i+'_score'] === 0 || score['f'+i+'_score'] > 0 ){
+                    $('.summary td.f'+i+' > div').text( (sum + score['f'+i+'_score']) );
+                    sum += score['f'+i+'_score'];
+            }
+        }
     }
 });
