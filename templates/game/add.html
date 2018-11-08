@@ -69,5 +69,5 @@ input.score{
 {% load static %}
 <script src="{% static 'js/game/game.js' %}"></script>
 <script src="{% static 'js/game/calc.js' %}"></script>
-
+{% csrf_token %}
 {% endblock %}
