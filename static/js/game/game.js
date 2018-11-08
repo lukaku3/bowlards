@@ -33,6 +33,11 @@ $(function(){
                 }
             }
         }
+        if ( this.name == 'f10_0' && this.value == 10){
+            fnAddSelect(lane_no[1])
+        }else if ( this.name == 'f10_0' && this.value < 10){
+            $('.score td.f10 > div > select[name="f10_2"]').remove();
+        }
         score[this.name] = this.value;
         score[this.name+"_dt"] = moment().format('YYYY-mm-DD hh:mm:ss');
     });
@@ -85,10 +90,19 @@ $(function(){
         }else{
             list = {"0": "G", "1":"1", "2":"2", "3":"3", "4":"4", "5":"5", "6":"6", "7":"7", "8":"8","9":"9","10":"X"};
         }
-        $('.score > td.f'+(cnt+1)+' > div').append('<select class="custom-select" name="f'+(cnt+1)+'_'+(select_cnt%2)+'">');
-        $('.score > td.f'+(cnt+1)+' > div > select[name="f'+(cnt+1)+'_'+(select_cnt%2)+'"]').append('<option>');
+        if ( select_cnt < 20){
+            $('.score > td.f'+(cnt+1)+' > div').append('<select class="custom-select" name="f'+(cnt+1)+'_'+(select_cnt%2)+'">');
+            $('.score > td.f'+(cnt+1)+' > div > select[name="f'+(cnt+1)+'_'+(select_cnt%2)+'"]').append('<option>');
+        }else if(select_cnt == 20){
+            $('.score > td.f'+(cnt)+' > div').append('<select class="custom-select" name="f'+(cnt)+'_2">');
+            $('.score > td.f'+(cnt)+' > div > select[name="f'+(cnt)+'_2"]').append('<option>');
+        }
         $.each(list, function(key,val){
-            $('.score > td.f'+(cnt+1)+' > div > select[name="f'+(cnt+1)+'_'+(select_cnt%2)+'"]').append('<option value="'+key+'">'+val);
+            if ( select_cnt < 20){
+                $('.score > td.f'+(cnt+1)+' > div > select[name="f'+(cnt+1)+'_'+(select_cnt%2)+'"]').append('<option value="'+key+'">'+val);
+            }else if(select_cnt == 20){
+                $('.score > td.f'+cnt+' > div > select[name="f'+cnt+'_2"]').append('<option value="'+key+'">'+val);
+            }
         });
     }
 
