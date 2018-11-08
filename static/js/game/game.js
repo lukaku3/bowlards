@@ -108,22 +108,23 @@ $(function(){
             if(score['f'+i+'_0'] == undefined) return false;
             var val0 = parseInt(score['f'+i+'_0']);
             var val1 = (parseInt(score['f'+i+'_1'])) ? parseInt(score['f'+i+'_1']) : 0 ;
-            var sum = 0;
-
-            sum = (val0 + val1);
-            console.log(val0);
-            console.log(val1);
-            console.log(sum);
             if (val0 == 10){
-                //
-                strike += 2;
-                console.log("strike:"+strike);
+                // strike;
+                if (score['f'+(i+1)+'_0'] !== undefined && score['f'+(i+1)+'_1'] !== undefined){
+                    if (score['f'+(i+1)+'_0'] >= 0 && score['f'+(i+1)+'_0'] < 10 
+                        && score['f'+(i+1)+'_1'] >= 0 && score['f'+(i+1)+'_1'] < 10){
+console.log(i);
+                        score['f'+i+'_score'] = (val0 + parseInt(score['f'+(i+1)+'_0']) + parseInt(score['f'+(i+1)+'_1']));
+                    }else if(score['f'+(i+1)+'_0'] == '10' && score['f'+(i+2)+'_0'] !== undefined){
+console.log(i);
+                        score['f'+i+'_score'] = (val0 + score['f'+(i+1)+'_0'] + score['f'+(i+2)+'_0']);
+                    }
+                }
             }else if( val1 == 10){
-                //
-                spare += 1;
-                console.log("spare");
+                // spare
+                if (score['f'+(i+1)+'_0'] !== undefined) score['f'+i+'_score'] = (val1 + parseInt(score['f'+(i+1)+'_0']));
             }else if( (val0 + val1) < 10 ){
-                $('.summary td.f'+i+' > div').text( sum );
+                score['f'+i+'_score'] = (val0 + val1);
             }
         }
     }
