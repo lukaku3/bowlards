@@ -33,9 +33,9 @@ $(function(){
                 }
             }
         }
-        if ( this.name == 'f10_0' && this.value == 10){
+        if ( (this.name == 'f10_0' || this.name == 'f10_1') && this.value == 10){
             fnAddSelect(lane_no[1])
-        }else if ( this.name == 'f10_0' && this.value < 10){
+        }else if ( (this.name == 'f10_0' || this.name == 'f10_1') && this.value < 10){
             $('.score td.f10 > div > select[name="f10_2"]').remove();
         }
         score[this.name] = this.value;
