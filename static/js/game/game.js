@@ -18,7 +18,6 @@ $(function(){
             }
         }
         if ( this.name.match(/f(\d)\_0/) != undefined){
-            //$('f'+cnt+'_1')
             var diff = 10 - parseInt(this.value);
             if ( diff == 0 ){
                 for(var i=1; i<11; i++){
@@ -33,13 +32,29 @@ $(function(){
                 }
             }
         }
-        if ( (this.name == 'f10_0' || this.name == 'f10_1') && this.value == 10){
-            fnAddSelect(lane_no[1])
-        }else if ( (this.name == 'f10_0' || this.name == 'f10_1') && this.value < 10){
+        if ( this.name == 'f10_0' && this.value == 10) {
+            $('select[name="f10_1"]').val("");
+            $('.score td.f10 > div > select[name="f10_1"] > option[value="10"]').text('X');
+            fnAddSelect(lane_no[1]);
+        }else if ( this.name == 'f10_1' && this.value == 10){
+            $('.score td.f10 > div > select[name="f10_2"] > option[value="10"]').text('X');
+        }else if ( this.name == 'f10_1' && this.value < 10){
+            $('.score td.f10 > div > select[name="f10_2"] > option[value="10"]').text('/');
+
+        }else if ( this.name == 'f10_0' && this.value < 10){
+            $('select[name="f10_1"]').val("");
             $('.score td.f10 > div > select[name="f10_2"]').remove();
+            $('.score td.f10 > div > select[name="f10_1"] > option[value="10"]').text('/');
         }
         score[this.name] = this.value;
         score[this.name+"_dt"] = moment().format('YYYY-mm-DD hh:mm:ss');
+        // doneBtn
+        if(lane_no[1] == 10){
+            $('div.form-group > div.col-sm > button#addLane').remove();
+            if( $('div.form-group > div.col-sm').length == 1){
+                $('div.form-group > div.col-sm').append('<button type="button" id="registBtn" class="btn btn-info">Regist</button>');
+            }
+        }
     });
 
     $("button.btn.btn-info").on("click", function(){
