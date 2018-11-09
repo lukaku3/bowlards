@@ -37,6 +37,7 @@ $(function(){
             $('.score td.f10 > div > select[name="f10_1"] > option[value="10"]').text('X');
             fnAddSelect(lane_no[1]);
         }else if ( this.name == 'f10_1' && this.value == 10){
+            fnAddSelect(lane_no[1]);
             $('.score td.f10 > div > select[name="f10_2"] > option[value="10"]').text('X');
         }else if ( this.name == 'f10_1' && this.value < 10){
             $('.score td.f10 > div > select[name="f10_2"] > option[value="10"]').text('/');
