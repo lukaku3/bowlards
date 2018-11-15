@@ -29,6 +29,7 @@ console.log(this.name);
         }
         fnCalc(lane_no[1]);
         fnShowScore();
+console.log(score);
     });
 
     $("button.btn.btn-info").on("click", function(){
@@ -140,12 +141,15 @@ console.log(this.name);
                     if ( v == 10) { //strike
                         if( ('f'+(fr+1)+'_0' in score) && ('f'+(fr+2)+'_0' in score) && score['f'+(fr+1)+'_0'] == 10 ){ // XX(X|,|[0-9])
                             score['f'+fr+'_score'] = (v + score['f'+(fr+1)+'_0'] + score['f'+(fr+2)+'_0']);
+console.log(1);
                         }else if(score['f'+(fr+1)+'_1'] == 10 && ('f'+(fr+1)+'_1' in score)) { // X([0-9])/
                             score['f'+fr+'_score'] = (v + score['f'+(fr+1)+'_1']);
+console.log(2);
                         }else if(('f'+(fr+2)+'_0' in score) == false) { // X([0-9])([0-9])
                             if (('f'+(fr+1)+'_0' in score) && ('f'+(fr+1)+'_1' in score)){
                                 if (score['f'+(fr+1)+'_0'] < 10 && score['f'+(fr+1)+'_1'] < 10){
                                     score['f'+fr+'_score'] = (v + score['f'+(fr+1)+'_0'] + score['f'+(fr+1)+'_1']);
+console.log(3);
                                 }
                             }
                         }
@@ -153,8 +157,10 @@ console.log(this.name);
                 }else if( k.match(/f(\d+)\_1/) ){
                     if (score['f'+fr+'_1'] == 10 && score['f'+(fr+1)+'_0'] >= 0){ // [0-9]/[0-10]
                         score['f'+fr+'_score'] = (v + score['f'+(fr+1)+'_0']);
+console.log(4);
                     }else if(score['f'+fr+'_0'] != 10 && score['f'+fr+'_1'] >= 0 && score['f'+fr+'_1'] < 10){
-                        score['f'+fr+'_score'] = (v + score['f'+fr+'_1']);
+                        score['f'+fr+'_score'] = (v + score['f'+fr+'_0']);
+console.log(5);
                     }
                 }
             }
