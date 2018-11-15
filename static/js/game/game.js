@@ -5,57 +5,31 @@ $(function(){
         $('#addFrame').prop('disabled', true);
     });
 
-
     $(document).on('change', 'select', function(){
+console.log(this.name);
         var data = [];
         var lane_no = this.name.match(/f([0-9]+)/);
         var select_cnt = fnCountSelect(lane_no[1]);
         var ex = fnCountSelect(lane_no[1]);
-        if( ex > 0 && ex % 2 == 1) fnAddSelect(lane_no[1]-1);
-        if ( this.name.match(/f(\d)\_1/) != undefined){
-            if ( ex > 0 && ex % 2 == 0 && this.name.match(/f(\d)\_1/)[1] == lane_no[1]){
-                $('#addFrame').prop('disabled', false);
-            }
-        }
-        if ( this.name.match(/f(\d)\_0/) != undefined){
-            var diff = 10 - parseInt(this.value);
-            if ( diff == 0 ){
-                for(var i=1; i<11; i++){
-                    $('select[name="f'+lane_no[1]+'_1"]').children('option[value='+i+']').remove();
-                }
-                
-                $('select[name="f'+lane_no[1]+'_1"]').val("0");
-                $('#addFrame').prop('disabled', false);
-            }else{
-                for(var i=0; i<10; i++){
-                    if ( diff <= i ) $('select[name="f'+lane_no[1]+'_1"]').children('option[value='+i+']').remove();
-                }
-            }
-        }
-        if ( this.name == 'f10_0' && this.value == 10) {
-            $('select[name="f10_1"]').val("");
-            $('.score td.f10 > div > select[name="f10_1"] > option[value="10"]').text('X');
-            fnAddSelect(lane_no[1]);
-        }else if ( this.name == 'f10_1' && this.value == 10){
-            fnAddSelect(lane_no[1]);
-            $('.score td.f10 > div > select[name="f10_2"] > option[value="10"]').text('X');
-        }else if ( this.name == 'f10_1' && this.value < 10){
-            $('.score td.f10 > div > select[name="f10_2"] > option[value="10"]').text('/');
-
-        }else if ( this.name == 'f10_0' && this.value < 10){
-            $('select[name="f10_1"]').val("");
-            $('.score td.f10 > div > select[name="f10_2"]').remove();
-            $('.score td.f10 > div > select[name="f10_1"] > option[value="10"]').text('/');
-        }
-        score[this.name] = this.value;
+        score[this.name] = parseInt(this.value); 
         score[this.name+"_dt"] = moment().format('YYYY-mm-DD hh:mm:ss');
-        // doneBtn
-        if(lane_no[1] == 10){
-            $('div.form-group > div.col-sm > button#addFrame').remove();
-            if( $('div.form-group > div.col-sm').length == 1){
-                $('div.form-group > div.col-sm').append('<button type="button" id="registBtn" class="btn btn-info">Regist</button>');
+        var select_num = $('td.f'+lane_no[1]+' > div > select').length;
+        if ( lane_no[1] < 10){
+            if(select_num < 2){ // frame 1 to 9
+                console.log("select_num:"+select_num);
+                fnAddSelect(lane_no[1],select_num);
+            }else if (select_num == 2){ // frame 1 to 9
+                if(this.value === ""){
+                    $('#addFrame').prop('disabled', true);
+                }else if(this.value >= 0) {
+                    $('#addFrame').prop('disabled', false);
+                }
             }
+        }else if(select_num < 3){ // frame 10
+            fnAddSelect(lane_no[1],select_num);
         }
+        fnCalc(lane_no[1]);
+        fnShowScore();
     });
 
     $("button.btn.btn-info").on("click", function(){
@@ -71,8 +45,9 @@ $(function(){
         fnAddTd(cnt);
         fnAddScore(cnt);
         $('#addFrame').prop('disabled', true);
-        fnCalc();
-        fnShowScore();
+        fnAddSelect((cnt+1),0);
+//        fnCalc();
+//        fnShowScore();
     };
 
     function fnDisableSelect(cnt){
@@ -98,7 +73,29 @@ $(function(){
         fnAddSelect(cnt);
     }
 
-    function fnAddSelect(cnt){
+    function fnAddSelect(fr = 0,fno = -1, gt = -1){
+        if (fr === 0 || fno == undefined || fno == -1 ) return true;
+        var list = {"0": "G", "1":"1", "2":"2", "3":"3", "4":"4", "5":"5", "6":"6", "7":"7", "8":"8","9":"9","10":"X"};
+        $('.score > td.f'+fr+' > div').append('<select class="custom-select" name="f'+fr+'_'+fno+'">');
+        var select = $('.score > td.f'+fr+' > div > select[name="f'+fr+'_'+fno+'"]');
+        select.append('<option>');
+        $.each(list, function(k,v){
+            if (fno == 1){
+                if (k === "0") select.append('<option value="'+k+'">-');
+                else if(k == 10) select.append('<option value="'+k+'">/');
+                else select.append('<option value="'+k+'">'+v); 
+            }else select.append('<option value="'+k+'">'+v); 
+        });
+        if ( fno == 1 && gt == 1) {
+            select.val("0");
+            score['f'+fr+'_'+fno] = 0;
+            score['f'+fr+'_'+fno+"_dt"] = moment().format('YYYY-mm-DD hh:mm:ss');
+            $('#addFrame').prop('disabled', false);
+//            fnCalc();
+        }
+    }
+
+    function fnAddSelect2(cnt){
         var select_cnt = fnCountSelect(cnt);
         var list = {};
         if ( select_cnt%2 == 1 ){
@@ -122,6 +119,10 @@ $(function(){
         });
     }
 
+    function fnResetSelect(flame,shot){
+
+    }
+
     function fnCountFrame(){
         return $("table#game > thead > tr > th").length;
     }
@@ -132,29 +133,43 @@ $(function(){
     }
 
     function fnCalc(){
-        var strike = 0;
-        var spare = 0;
-        for(var i=1; i<11; i++){
-            if(score['f'+i+'_0'] == undefined) return false;
-            var val0 = parseInt(score['f'+i+'_0']);
-            var val1 = (parseInt(score['f'+i+'_1'])) ? parseInt(score['f'+i+'_1']) : 0 ;
-            if (val0 == 10){ // strike;
-                if (score['f'+(i+1)+'_0'] !== undefined && score['f'+(i+1)+'_1'] !== undefined && score['f'+(i+1)+'_1'] != 10){
-                    if (score['f'+(i+1)+'_0'] >= 0 && score['f'+(i+1)+'_0'] < 10 
-                        && score['f'+(i+1)+'_1'] >= 0 && score['f'+(i+1)+'_1'] < 10){
-                        score['f'+i+'_score'] = (val0 + parseInt(score['f'+(i+1)+'_0']) + parseInt(score['f'+(i+1)+'_1']));
+console.log("--fnCalc---");
+        $.each(score, function(k,v){
+            var m = k.match(/^f([0-9]+)+\_[0-2]$/);
+            var fr = (m) ? parseInt(m[1]) : null;
+            if ( fr != undefined){
+                if ( k.match(/f(\d+)\_0/) ){
+                    if ( v == 10) { //strike
+                        //if( score['f'+(fr+1)+'_0'] == 10 && score['f'+(fr+2)+'_0'] >= 0){ // XX(X|,|[0-9])
+                        if( ('f'+(fr+1)+'_0' in score) && ('f'+(fr+2)+'_0' in score) && score['f'+(fr+1)+'_0'] == 10 ){ // XX(X|,|[0-9])
+                            score['f'+fr+'_score'] = (v + score['f'+(fr+1)+'_0'] + score['f'+(fr+2)+'_0']);
+console.log(1);
+                        //}else if(score['f'+(fr+1)+'_1'] == 10) { // X([0-9])/
+                        }else if(score['f'+(fr+1)+'_1'] == 10 && ('f'+(fr+1)+'_1' in score)) { // X([0-9])/
+                            score['f'+fr+'_score'] = (v + score['f'+(fr+1)+'_1']);
+console.log(2);
+                        //}else if(score['f'+(fr+1)+'_1'] != 10 && score['f'+(fr+1)+'_1'] != 10) { // X([0-9])([0-9])
+                        }else if(('f'+(fr+2)+'_0' in score) == false) { // X([0-9])([0-9])
+                            if (('f'+(fr+1)+'_0' in score) && ('f'+(fr+1)+'_1' in score)){
+                                if (score['f'+(fr+1)+'_0'] < 10 && score['f'+(fr+1)+'_1'] < 10){
+                                    score['f'+fr+'_score'] = (v + score['f'+(fr+1)+'_0'] + score['f'+(fr+1)+'_1']);
+console.log(3);
+                                }
+                            }
+                        }
                     }
-                }else if(score['f'+(i+1)+'_0'] == 10 && (score['f'+(i+2)+'_0'] === "0" || score['f'+(i+2)+'_0'])>0 ){
-                    score['f'+i+'_score'] = (val0 + parseInt(score['f'+(i+1)+'_0']) + parseInt(score['f'+(i+2)+'_0']) );
-                }else if( parseInt(score['f'+(i+1)+'_1']) == 10){
-                    score['f'+i+'_score'] = 20;
+                }else if( k.match(/f(\d+)\_1/) ){
+                    if (score['f'+fr+'_1'] == 10 && score['f'+(fr+1)+'_0'] >= 0){ // [0-9]/[0-10]
+console.log(4);
+                        score['f'+fr+'_score'] = (v + score['f'+(fr+1)+'_0']);
+                    }else if(score['f'+fr+'_0'] != 10 && score['f'+fr+'_1'] >= 0 && score['f'+fr+'_1'] < 10){
+console.log(5);
+                        score['f'+fr+'_score'] = (v + score['f'+fr+'_1']);
+                    }
                 }
-            }else if( val1 == 10){ // spare
-                if (score['f'+(i+1)+'_0'] !== undefined) score['f'+i+'_score'] = (val1 + parseInt(score['f'+(i+1)+'_0']));
-            }else if( (val0 + val1) < 10 ){
-                score['f'+i+'_score'] = (val0 + val1);
             }
-        }
+        });
+        console.log(score); 
     }
 
     function fnShowScore(){
@@ -165,5 +180,6 @@ $(function(){
                     sum += score['f'+i+'_score'];
             }
         }
+console.log(score);
     }
 });
