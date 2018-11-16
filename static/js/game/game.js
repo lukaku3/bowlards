@@ -6,9 +6,10 @@ $(function(){
     });
 
     $(document).on('change', 'select', function(){
-console.log(this.name);
+//console.log(this.name);
         var data = [];
         var lane_no = this.name.match(/f([0-9]+)/);
+console.log(lane_no[1]);
         var select_cnt = fnCountSelect(lane_no[1]);
         var ex = fnCountSelect(lane_no[1]);
         score[this.name] = parseInt(this.value); 
@@ -24,12 +25,32 @@ console.log(this.name);
                     $('#addFrame').prop('disabled', false);
                 }
             }
-        }else if(select_num < 3){ // frame 10
+            if(this.name.match(/_+0$/) && this.value == 10){
+                $('select[name="f'+lane_no[1]+'_1"]').val("0");
+                score['f'+lane_no[1]+'_1'] = 0;
+                score['f'+lane_no[1]+'_1'+"_dt"] = moment().format('YYYY-mm-DD hh:mm:ss');
+                $('#addFrame').prop('disabled', false);
+            }
+        }else if(this.name.match(/^f10_0$/) && select_num < 3){ // frame 10
             fnAddSelect(lane_no[1],select_num);
+console.log([this.name,this.value]);
+            if (this.value == 10){
+console.log(select_num);
+                $('select[name="f10_1"] option[value="10"]').text('X');
+                fnAddSelect(lane_no[1],2);
+            }else{
+                $('select[name="f10_1"] option[value="10"]').text('/');
+                $('select[name="f10_2"]').remove();
+            }
         }
         fnCalc(lane_no[1]);
         fnShowScore();
 console.log(score);
+        if (('f10_0' in score) && ('f10_1' in score)){
+           if(score['f10_0'] != 10 && score['f10_1'] != 10){
+                $('select[name="f10_2"]').remove();
+            }
+        }
     });
 
     $("button.btn.btn-info").on("click", function(){
@@ -46,8 +67,6 @@ console.log(score);
         fnAddScore(cnt);
         $('#addFrame').prop('disabled', true);
         fnAddSelect((cnt+1),0);
-//        fnCalc();
-//        fnShowScore();
     };
 
     function fnDisableSelect(cnt){
@@ -78,7 +97,7 @@ console.log(score);
         var list = {"0": "G", "1":"1", "2":"2", "3":"3", "4":"4", "5":"5", "6":"6", "7":"7", "8":"8","9":"9","10":"X"};
         $('.score > td.f'+fr+' > div').append('<select class="custom-select" name="f'+fr+'_'+fno+'">');
         var select = $('.score > td.f'+fr+' > div > select[name="f'+fr+'_'+fno+'"]');
-        select.append('<option>');
+        select.append('<option value="">');
         $.each(list, function(k,v){
             if (fno == 1){
                 if (k === "0") select.append('<option value="'+k+'">-');
@@ -95,33 +114,6 @@ console.log(score);
         }
     }
 
-    function fnAddSelect2(cnt){
-        var select_cnt = fnCountSelect(cnt);
-        var list = {};
-        if ( select_cnt%2 == 1 ){
-            list = {"0": "-", "1":"1", "2":"2", "3":"3", "4":"4", "5":"5", "6":"6", "7":"7", "8":"8","9":"9","10":"/"};
-        }else{
-            list = {"0": "G", "1":"1", "2":"2", "3":"3", "4":"4", "5":"5", "6":"6", "7":"7", "8":"8","9":"9","10":"X"};
-        }
-        if ( select_cnt < 20){
-            $('.score > td.f'+(cnt+1)+' > div').append('<select class="custom-select" name="f'+(cnt+1)+'_'+(select_cnt%2)+'">');
-            $('.score > td.f'+(cnt+1)+' > div > select[name="f'+(cnt+1)+'_'+(select_cnt%2)+'"]').append('<option>');
-        }else if(select_cnt == 20){
-            $('.score > td.f'+(cnt)+' > div').append('<select class="custom-select" name="f'+(cnt)+'_2">');
-            $('.score > td.f'+(cnt)+' > div > select[name="f'+(cnt)+'_2"]').append('<option>');
-        }
-        $.each(list, function(key,val){
-            if ( select_cnt < 20){
-                $('.score > td.f'+(cnt+1)+' > div > select[name="f'+(cnt+1)+'_'+(select_cnt%2)+'"]').append('<option value="'+key+'">'+val);
-            }else if(select_cnt == 20){
-                $('.score > td.f'+cnt+' > div > select[name="f'+cnt+'_2"]').append('<option value="'+key+'">'+val);
-            }
-        });
-    }
-
-    function fnResetSelect(flame,shot){
-
-    }
 
     function fnCountFrame(){
         return $("table#game > thead > tr > th").length;
@@ -138,7 +130,20 @@ console.log(score);
             var fr = (m) ? parseInt(m[1]) : null;
             if ( fr != undefined){
                 if ( k.match(/f(\d+)\_0/) ){
-                    if ( v == 10) { //strike
+                    if ( v == 10 && fr == 9) { //strike 9frame
+console.log(-1);
+                        if ( ('f'+(fr+1)+'_0' in score) && ('f'+(fr+1)+'_1' in score) && score['f'+(fr+1)+'_1'] != 10 && score['f'+(fr+1)+'_1'] == 10){ // X-/
+                            score['f'+fr+'_score'] = (v + score['f'+(fr+1)+'_1']);
+console.log(-2);
+                        }else if ( ('f'+(fr+1)+'_0' in score) && ('f'+(fr+1)+'_1' in score) && score['f'+(fr+1)+'_0'] == 10){ // XX[0-10]
+                            score['f'+fr+'_score'] = (v + score['f'+(fr+1)+'_0'] + score['f'+(fr+1)+'_1']);
+console.log(-3);
+                        }else if ( ('f'+(fr+1)+'_0' in score) && ('f'+(fr+1)+'_1' in score)){ // X[0-9][0-9]
+                            if (score['f'+(fr+1)+'_0'] < 10 && score['f'+(fr+1)+'_1'] < 10){ 
+                                score['f'+fr+'_score'] = (v + score['f'+(fr+1)+'_0'] + score['f'+(fr+1)+'_1']);
+                            }
+                        }
+                    }else if ( v == 10) { //strike
                         if( ('f'+(fr+1)+'_0' in score) && ('f'+(fr+2)+'_0' in score) && score['f'+(fr+1)+'_0'] == 10 ){ // XX(X|,|[0-9])
                             score['f'+fr+'_score'] = (v + score['f'+(fr+1)+'_0'] + score['f'+(fr+2)+'_0']);
 console.log(1);
