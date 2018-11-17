@@ -6,10 +6,8 @@ $(function(){
     });
 
     $(document).on('change', 'select', function(){
-//console.log(this.name);
         var data = [];
         var lane_no = this.name.match(/f([0-9]+)/);
-console.log(lane_no[1]);
         var select_cnt = fnCountSelect(lane_no[1]);
         var ex = fnCountSelect(lane_no[1]);
         score[this.name] = parseInt(this.value); 
@@ -33,7 +31,6 @@ console.log(lane_no[1]);
             }
         }else if(this.name.match(/^f10_0$/) && select_num < 2){ // frame 10
             fnAddSelect(lane_no[1],select_num);
-console.log([this.name,this.value]);
             if (this.value == 10){
                 fnAddSelect(lane_no[1],2);
             }
@@ -53,7 +50,6 @@ console.log([this.name,this.value]);
         }
         fnCalc(lane_no[1]);
         fnShowScore();
-console.log(score);
     });
 
     $("button.btn.btn-info").on("click", function(){
@@ -148,30 +144,22 @@ console.log(score);
                     }else if ( v == 10) { //strike
                         if( ('f'+(fr+1)+'_0' in score) && ('f'+(fr+2)+'_0' in score) && score['f'+(fr+1)+'_0'] == 10 ){ // XX(X|,|[0-9])
                             score['f'+fr+'_score'] = (v + score['f'+(fr+1)+'_0'] + score['f'+(fr+2)+'_0']);
-console.log(1);
                         }else if(score['f'+(fr+1)+'_1'] == 10 && ('f'+(fr+1)+'_1' in score)) { // X([0-9])/
                             score['f'+fr+'_score'] = (v + score['f'+(fr+1)+'_1']);
-console.log(2);
                         }else if(('f'+(fr+2)+'_0' in score) == false) { // X([0-9])([0-9])
                             if (('f'+(fr+1)+'_0' in score) && ('f'+(fr+1)+'_1' in score)){
                                 if (score['f'+(fr+1)+'_0'] < 10 && score['f'+(fr+1)+'_1'] < 10){
                                     score['f'+fr+'_score'] = (v + score['f'+(fr+1)+'_0'] + score['f'+(fr+1)+'_1']);
-console.log(3);
-                                }
                             }
                         }
                     }
                 }else if( k.match(/f(\d+)\_1/) ){
-console.log("4.0");
                     if (score['f'+fr+'_1'] == 10 && score['f'+(fr+1)+'_0'] >= 0){ // [0-9]/[0-10]
                         score['f'+fr+'_score'] = (v + score['f'+(fr+1)+'_0']);
-console.log(4);
                     }else if(score['f'+fr+'_0'] != 10 && score['f'+fr+'_1'] >= 0 && score['f'+fr+'_1'] < 10){
                         score['f'+fr+'_score'] = (v + score['f'+fr+'_0']);
-console.log(5);
                     }else if( ('f10_1' in score) && score['f10_0'] != 10){
                         score['f10_score'] = (score['f10_0'] + score['f10_1']); // [0-9][0-9]-
-console.log(6);
                     }
                 }else if( k.match(/f10\_2/) ){
                     //}else if( ('f10_1' in score) && score['f10_0'] != 10 && score['f10_1'] == 10){
