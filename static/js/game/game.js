@@ -150,6 +150,7 @@ $(function(){
                             if (('f'+(fr+1)+'_0' in score) && ('f'+(fr+1)+'_1' in score)){
                                 if (score['f'+(fr+1)+'_0'] < 10 && score['f'+(fr+1)+'_1'] < 10){
                                     score['f'+fr+'_score'] = (v + score['f'+(fr+1)+'_0'] + score['f'+(fr+1)+'_1']);
+                                }
                             }
                         }
                     }
