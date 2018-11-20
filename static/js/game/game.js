@@ -50,7 +50,11 @@ $(function(){
         }
         fnCalc(lane_no[1]);
         fnShowScore();
+        if ( this.name == "f10_2" || (score['f10_0'] != 10 && score['f10_1'] != 10 && this.name == 'f10_1' )){
+console.log("save mode.");
+        }
     });
+
 
     $("button.btn.btn-info").on("click", function(){
         var cnt = fnCountFrame();

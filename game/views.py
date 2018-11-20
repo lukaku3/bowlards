@@ -14,7 +14,13 @@ index = IndexView.as_view()
 class AddView(View):
     def get(self, request, *args, **kwargs):
         context = {
-            'msg': 'game/index'
+            'msg': 'game/add'
+        }
+        return render(request, 'game/add.html', context)
+
+    def post(self, request, *args, **kwargs):
+        context = {
+            'msg': 'game/add'
         }
         return render(request, 'game/add.html', context)
 
