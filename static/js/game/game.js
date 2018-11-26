@@ -51,22 +51,46 @@ $(function(){
         fnCalc(lane_no[1]);
         fnShowScore();
         if ( this.name == "f10_2" || (score['f10_0'] != 10 && score['f10_1'] != 10 && this.name == 'f10_1' )){
+            //fnPostScore();
 console.log("save mode.");
+console.log(score);
         }
     });
 
 
-    $("button.btn.btn-info").on("click", function(){
+    //$("button.btn.btn-info").on("click", function(){
+    $("#saveGame").on("click", function(){
+        console.log("save");
+        fnPostScore();
+    });
+
+    $("#addFrame").on("click", function(){
         var cnt = fnCountFrame();
         if ( cnt < 10 ) {
             fnAddFrame(cnt);
         }
     });
 
+    function fnPostScore(){
+        $.ajax({
+          type: "POST",
+          url: 'http://192.168.33.11:8000/api/v1/game/add',
+          data: score,
+          timeout: 3000
+        }).done(function(data){
+          console.log(data);
+        }).fail(function(data){
+          console.log('error',data);
+        }).always(function(data){
+          console.log('always called');
+        });
+    }
+
     function fnAddFrame(cnt){
         fnDisableSelect(cnt);
         fnAddHead(cnt);
         fnAddTd(cnt);
+
         fnAddScore(cnt);
         $('#addFrame').prop('disabled', true);
         fnAddSelect((cnt+1),0);

@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.views import View
+import logging
 
 # Create your views here.
 class IndexView(View):
@@ -18,16 +19,14 @@ class AddView(View):
         }
         return render(request, 'game/add.html', context)
 
-    def post(self, request, *args, **kwargs):
-        context = {
-            'msg': 'game/add'
-        }
-        return render(request, 'game/add.html', context)
-
 add = AddView.as_view()
 
-class changeView(View):
+class ChangeView(View):
     def get(self, request, *args, **kwargs):
         context = {
         }
         return render(request, 'game/index.html', context)
+
+change = ChangeView.as_view()
+
+

@@ -56,20 +56,15 @@ input.score{
                     <button id="addFrame" type="button" class="btn btn-info">NextFrame</button>
                 </div>
             </div>
+{% csrf_token %}
         </form>
     </div>
   </div>
 </div>
-{{ form }}
-{{ form.select.label　}}
-{% for radio in form.select %}
-    {{ radio.tag }}
-    <label>{{ radio.choice_label }}</label>
-{% endfor %}
+<button id="saveGame" type="button" class="btn btn-info">SaveGame</button>
 {% endblock %}
 {% block extra_js %}
 {% load static %}
 <script src="{% static 'js/game/game.js' %}"></script>
 <script src="{% static 'js/game/calc.js' %}"></script>
-{% csrf_token %}
 {% endblock %}
