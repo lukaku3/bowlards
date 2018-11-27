@@ -18,9 +18,14 @@ class IndexView(View):
 index = IndexView.as_view()
 
 class AddView(View):
-    def get(self, request, *args, **kwargs):
-        json_dta = json.loads(request.POST['f10_0'])
+    def post(self, request, *args, **kwargs):
+        json_post = request.POST
+        score = json.loads(json_post['score'])
+        pprint.pprint(score)
+#        for i in json_post['score']:
+#            pprint.pprint(i)
         return render(request, 'api/game/add.html', {'save': 'OK'})
+        return JsonResponse(json_post)
 
 add = AddView.as_view()
 
