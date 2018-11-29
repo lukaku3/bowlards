@@ -33,7 +33,9 @@ class AddView(View):
         new_dta = Game(user_id=request.user.id)
         for k in score.keys():
             setattr(new_dta, k, score[k])
-        new_dta.save()
+        ret = false
+        ret = new_dta.save()
+        pprint.pprint(ret)
         return render(request, 'api/game/add.html', {'save': 'OK'})
         return JsonResponse(request.user)
 

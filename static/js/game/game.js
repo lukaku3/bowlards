@@ -4,6 +4,9 @@ $(function(){
     $(document).ready( function(){
         $('#addFrame').prop('disabled', true);
     });
+    $(document).on('click', '#saveGame', function(){
+        fnPostScore();
+    });
 
     $(document).on('change', 'select', function(){
         var data = [];
@@ -55,11 +58,6 @@ $(function(){
             $('#saveGame').html('saveGame');
             $('#saveGame').prop('disabled', false);
         }
-    });
-
-
-    $("#saveGame").on("click", function(){
-        fnPostScore();
     });
 
     $("#addFrame").on("click", function(){
