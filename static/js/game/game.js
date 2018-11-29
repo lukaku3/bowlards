@@ -11,7 +11,7 @@ $(function(){
         var select_cnt = fnCountSelect(lane_no[1]);
         var ex = fnCountSelect(lane_no[1]);
         score[this.name] = parseInt(this.value); 
-        score[this.name+"_dt"] = moment().format('YYYY-mm-DD hh:mm:ss');
+        score[this.name+"_dt"] = moment().format('YYYY-MM-DD HH:mm:ss');
         var select_num = $('td.f'+lane_no[1]+' > div > select').length;
         if ( lane_no[1] < 10){
             if(select_num < 2){ // frame 1 to 9
@@ -26,7 +26,7 @@ $(function(){
             if(this.name.match(/_+0$/) && this.value == 10){
                 $('select[name="f'+lane_no[1]+'_1"]').val("0");
                 score['f'+lane_no[1]+'_1'] = 0;
-                score['f'+lane_no[1]+'_1'+"_dt"] = moment().format('YYYY-mm-DD hh:mm:ss');
+                score['f'+lane_no[1]+'_1'+"_dt"] = moment().format('YYYY-MM-DD HH:mm:ss');
                 $('#addFrame').prop('disabled', false);
             }
         }else if(this.name.match(/^f10_0$/) && select_num < 2){ // frame 10
@@ -51,12 +51,13 @@ $(function(){
         fnCalc(lane_no[1]);
         fnShowScore();
         if ( this.name == "f10_2" || (score['f10_0'] != 10 && score['f10_1'] != 10 && this.name == 'f10_1' )){
-            //fnPostScore();
+            $('#addFrame').attr('id', 'saveGame');
+            $('#saveGame').html('saveGame');
+            $('#saveGame').prop('disabled', false);
         }
     });
 
 
-    //$("button.btn.btn-info").on("click", function(){
     $("#saveGame").on("click", function(){
         fnPostScore();
     });
@@ -134,7 +135,7 @@ $(function(){
         if ( fno == 1 && gt == 1) {
             select.val("0");
             score['f'+fr+'_'+fno] = 0;
-            score['f'+fr+'_'+fno+"_dt"] = moment().format('YYYY-mm-DD hh:mm:ss');
+            score['f'+fr+'_'+fno+"_dt"] = moment().format('YYYY-MM-DD HH:mm:ss');
             $('#addFrame').prop('disabled', false);
 //            fnCalc();
         }

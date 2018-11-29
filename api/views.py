@@ -4,6 +4,8 @@ from django.views import View
 import logging
 import pprint
 import json
+from game.models import Game
+
 
 # Create your views here.
 class IndexView(View):
@@ -19,13 +21,21 @@ index = IndexView.as_view()
 
 class AddView(View):
     def post(self, request, *args, **kwargs):
+        if request.user.is_authenticated:
+            # Do something for logged-in users.
+            pprint.pprint("logged in")
+        else:
+            # Do something for anonymous users.
+            pprint.pprint("not logged in")
         json_post = request.POST
         score = json.loads(json_post['score'])
-        pprint.pprint(score)
-#        for i in json_post['score']:
-#            pprint.pprint(i)
+        #cnt = Game.objects.all().count()
+        new_dta = Game(user_id=request.user.id)
+        for k in score.keys():
+            setattr(new_dta, k, score[k])
+        new_dta.save()
         return render(request, 'api/game/add.html', {'save': 'OK'})
-        return JsonResponse(json_post)
+        return JsonResponse(request.user)
 
 add = AddView.as_view()
 
