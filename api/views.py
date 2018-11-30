@@ -5,7 +5,7 @@ import logging
 import pprint
 import json
 from game.models import Game
-
+#import pymysql.cursors
 
 # Create your views here.
 class IndexView(View):
@@ -33,11 +33,8 @@ class AddView(View):
         new_dta = Game(user_id=request.user.id)
         for k in score.keys():
             setattr(new_dta, k, score[k])
-        ret = false
-        ret = new_dta.save()
-        pprint.pprint(ret)
-        return render(request, 'api/game/add.html', {'save': 'OK'})
-        return JsonResponse(request.user)
+        last_id = Game.objects.latest('id')
+        return JsonResponse({'message': 'OK', 'id': last_id.id})
 
 add = AddView.as_view()
 

@@ -5,6 +5,8 @@ $(function(){
         $('#addFrame').prop('disabled', true);
     });
     $(document).on('click', '#saveGame', function(){
+        $(this).prop('disabled', true);
+        $(this).removeAttr('id');
         fnPostScore();
     });
 
@@ -76,7 +78,7 @@ $(function(){
           data: json_dta,
           timeout: 3000
         }).done(function(data){
-          console.log(data);
+            if (data.message == 'OK' && data.id != undefined) score.id = data.id;
         }).fail(function(data){
           console.log('error',data);
         }).always(function(data){
