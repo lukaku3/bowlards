@@ -1,9 +1,11 @@
 from django.shortcuts import render
 from django.http.response import JsonResponse
 from django.views import View
+import json
 import logging
 import pprint
-import json
+import pytz
+import re
 from game.models import Game
 #import pymysql.cursors
 
@@ -24,17 +26,43 @@ class AddView(View):
         if request.user.is_authenticated:
             # Do something for logged-in users.
             pprint.pprint("logged in")
+            ret = self.saveGame(request, json.loads(request.POST['score']))
+            return JsonResponse(ret)
         else:
             # Do something for anonymous users.
             pprint.pprint("not logged in")
-        json_post = request.POST
-        score = json.loads(json_post['score'])
-        #cnt = Game.objects.all().count()
+            return JsonResponse({'message': 'NG'})
+
+    def saveGame(self,request, score):
         new_dta = Game(user_id=request.user.id)
+        msg = 'NG'
         for k in score.keys():
-            setattr(new_dta, k, score[k])
-        last_id = Game.objects.latest('id')
-        return JsonResponse({'message': 'OK', 'id': last_id.id})
+            if ( re.match(r'dt',k) ):
+#                self.fmtDt(score[k])
+                pprint.pprint( k )
+                #pprint.pprint( score[k] )
+                #setattr(new_dta, k, self.fmtDt(score[k]) )
+            else:
+                pprint.pprint( k )
+                setattr(new_dta, k, score[k])
+        try:
+            new_dta.save()
+            last_id = Game.objects.latest('id')
+            if ( 'id' in score):
+                msg = 'UPDATED'
+            else:
+                msg = 'REGISTED'
+            return {'message': msg, 'id': last_id.id}
+        except:
+            return {'message': 'UNEXCEPT ERROR', "Unexpected error": sys.exc_info()[0]}
+        
+    def fmtDt(self, dt):
+        pprint.pprint(str(dt))
+#        jst = pytz.timezone('Asia/Tokyo')
+#        date,time = str.split(" ")
+#        pprint.pprint(date)
+#        pprint.pprint(time)
+#        loc_dt = eastern.localize(datetime(2002, 10, 27, 6, 0, 0))
 
 add = AddView.as_view()
 

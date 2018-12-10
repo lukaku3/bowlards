@@ -35,8 +35,11 @@ input.score{
 }
 </style>
 {% endblock %}
+
 {% block content %}
 {% include "game/nav.html" %}
+{% load bootstrap4 %}
+{% bootstrap_alert "" alert_type='error' %}
 <div class="container">
     <div class="row">
         <form class="table-responsive">

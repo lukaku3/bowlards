@@ -3,10 +3,11 @@ $(function(){
     fnAddFrame(0);
     $(document).ready( function(){
         $('#addFrame').prop('disabled', true);
+        $('div.alert').css('display', 'none');
     });
     $(document).on('click', '#saveGame', function(){
-        $(this).prop('disabled', true);
-        $(this).removeAttr('id');
+//        $(this).prop('disabled', true);
+//        $(this).removeAttr('id');
         fnPostScore();
     });
 
@@ -77,12 +78,18 @@ $(function(){
           url: '/api/v1/game/add',
           data: json_dta,
           timeout: 3000
-        }).done(function(data){
-            if (data.message == 'OK' && data.id != undefined) score.id = data.id;
+        }).done(function(data, status, xhr){
+            if (xhr.status == 200 ){
+                if (data.id != undefined) score.id = data.id;
+                $('div.alert').css('display', 'block');
+                $('div.alert').text(data.message);
+                
+            } 
+            console.log(data);
         }).fail(function(data){
           console.log('error',data);
         }).always(function(data){
-          console.log('always called');
+          //console.log('always called');
         });
     }
 
